@@ -5,18 +5,18 @@ import scala.annotation.tailrec
 class Directory(override val parentPath: String, override val name: String, val contents: List[DirEntry])
     extends DirEntry(parentPath, name){
 
-    def hasEntry(name: String): Boolean = 
+    def hasEntry(name: String): Boolean =
         findEntry(name) != null
 
-    def getAllFoldersInPath: List[String] = 
+    def getAllFoldersInPath: List[String] =
         // /a/b/c/d => List["a", "b", "c", "d"]
         path.substring(1).split(Directory.SEPARATOR).toList.filter(x => !x.isEmpty)
 
-    def findDescendant(path: List[String]): Directory = 
+    def findDescendant(path: List[String]): Directory =
         if (path.isEmpty) this
         else findEntry(path.head).asDirectory.findDescendant(path.tail)
 
-    def addEntry(newEntry: DirEntry): Directory = 
+    def addEntry(newEntry: DirEntry): Directory =
         new Directory(parentPath, name, contents :+ newEntry)
 
     def findEntry(entryName: String): DirEntry = {
@@ -25,11 +25,11 @@ class Directory(override val parentPath: String, override val name: String, val 
             if (contentList.isEmpty) null
             else if (contentList.head.name.equals(name)) contentList.head
             else findEntryHelper(name, contentList.tail)
-        
+
         findEntryHelper(entryName, contents)
     }
 
-    def replaceEntry(entryName: String, newEntry: DirEntry): Directory = 
+    def replaceEntry(entryName: String, newEntry: DirEntry): Directory =
         new Directory(parentPath, name, contents.filter(e => !e.name.equals(entryName)) :+ newEntry)
 
     def asDirectory: Directory = this
@@ -42,6 +42,6 @@ object Directory {
     val ROOT_PATH = "/"
 
     def ROOT: Directory = Directory.empty("", "")
-    def empty(parentPath: String, name: String): Directory = 
+    def empty(parentPath: String, name: String): Directory =
         new Directory(parentPath, name, List())
 }
