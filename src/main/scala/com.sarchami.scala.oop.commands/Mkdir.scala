@@ -26,7 +26,7 @@ class Mkdir(name: String) extends Command {
 
     def doMkdir(state:State, name: String): State = {
         def updateStructure(currentDirectory: Directory, path: List[String], newEntry: DirEntry): Directory = {
-            
+
             if (path.isEmpty) currentDirectory.addEntry(newEntry)
             else {
                 println(path)
