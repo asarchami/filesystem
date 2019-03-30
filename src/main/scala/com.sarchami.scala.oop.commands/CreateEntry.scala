@@ -43,7 +43,7 @@ abstract class CreateEntry(name: String) extends Command {
 
     // 2. create new directory entry in the wd
     // TODO implement this
-    val newEntry = createSpecificEntry(state, name)
+    val newEntry = createSpecificEntry(state)
     // val newDirectory = Directory.empty(wd.path, name)
 
     // 3. update the whole directory structure starting from the root
@@ -56,5 +56,5 @@ abstract class CreateEntry(name: String) extends Command {
     State(newRoot, newWd)
   }
 
-  def createSpecificEntry(state: State, entryName: String): DirEntry
+  def createSpecificEntry(state: State): DirEntry
 }
