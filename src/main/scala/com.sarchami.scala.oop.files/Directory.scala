@@ -35,7 +35,7 @@ class Directory(override val parentPath: String, override val name: String, val 
 
   def asDirectory: Directory = this
 
-  def asFile: File = throw FileSystemException("A directory cannot be converted to file!")
+  def asFile: File = throw new FileSystemException("A directory cannot be converted to file!")
 
   def getType: String = "Directory"
 }
