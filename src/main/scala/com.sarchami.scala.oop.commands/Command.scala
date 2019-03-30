@@ -11,6 +11,8 @@ object Command {
   val MKDIR = "mkdir"
   val LS = "ls"
   val PWD = "pwd"
+  val TOUCH = "touch"
+
   def emptyCommand: Command = new Command {
     override def apply(state: State): State = state
   }
