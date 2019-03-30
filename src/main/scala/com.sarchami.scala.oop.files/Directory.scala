@@ -1,47 +1,50 @@
 package com.sarchami.scala.oop.files
 
+import com.sarchami.scala.oop.filesystem.FileSystemException
 import scala.annotation.tailrec
 
 class Directory(override val parentPath: String, override val name: String, val contents: List[DirEntry])
     extends DirEntry(parentPath, name){
 
-    def hasEntry(name: String): Boolean =
-        findEntry(name) != null
+  def hasEntry(name: String): Boolean =
+    findEntry(name) != null
 
-    def getAllFoldersInPath: List[String] =
-        // /a/b/c/d => List["a", "b", "c", "d"]
-        path.substring(1).split(Directory.SEPARATOR).toList.filter(x => !x.isEmpty)
+  def getAllFoldersInPath: List[String] =
+    // /a/b/c/d => List["a", "b", "c", "d"]
+    path.substring(1).split(Directory.SEPARATOR).toList.filter(x => !x.isEmpty)
 
-    def findDescendant(path: List[String]): Directory =
-        if (path.isEmpty) this
-        else findEntry(path.head).asDirectory.findDescendant(path.tail)
+  def findDescendant(path: List[String]): Directory =
+    if (path.isEmpty) this
+    else findEntry(path.head).asDirectory.findDescendant(path.tail)
 
-    def addEntry(newEntry: DirEntry): Directory =
-        new Directory(parentPath, name, contents :+ newEntry)
+  def addEntry(newEntry: DirEntry): Directory =
+    new Directory(parentPath, name, contents :+ newEntry)
 
-    def findEntry(entryName: String): DirEntry = {
-        @tailrec
-        def findEntryHelper(name: String, contentList: List[DirEntry]): DirEntry =
-            if (contentList.isEmpty) null
-            else if (contentList.head.name.equals(name)) contentList.head
-            else findEntryHelper(name, contentList.tail)
+  def findEntry(entryName: String): DirEntry = {
+    @tailrec
+    def findEntryHelper(name: String, contentList: List[DirEntry]): DirEntry =
+      if (contentList.isEmpty) null
+      else if (contentList.head.name.equals(name)) contentList.head
+      else findEntryHelper(name, contentList.tail)
 
-        findEntryHelper(entryName, contents)
-    }
+    findEntryHelper(entryName, contents)
+  }
 
-    def replaceEntry(entryName: String, newEntry: DirEntry): Directory =
-        new Directory(parentPath, name, contents.filter(e => !e.name.equals(entryName)) :+ newEntry)
+  def replaceEntry(entryName: String, newEntry: DirEntry): Directory =
+    new Directory(parentPath, name, contents.filter(e => !e.name.equals(entryName)) :+ newEntry)
 
-    def asDirectory: Directory = this
+  def asDirectory: Directory = this
 
-    def getType: String = "Directory"
+  def asFile: File = throw FileSystemException("A directory cannot be converted to file!")
+
+  def getType: String = "Directory"
 }
 
 object Directory {
-    val SEPARATOR = "/"
-    val ROOT_PATH = "/"
+  val SEPARATOR = "/"
+  val ROOT_PATH = "/"
 
-    def ROOT: Directory = Directory.empty("", "")
-    def empty(parentPath: String, name: String): Directory =
-        new Directory(parentPath, name, List())
+  def ROOT: Directory = Directory.empty("", "")
+  def empty(parentPath: String, name: String): Directory =
+    new Directory(parentPath, name, List())
 }
