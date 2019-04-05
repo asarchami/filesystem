@@ -52,3 +52,5 @@ project/build.properties
 target/
 .ensime_cache/
 .ensime
+.bloop
+metals*
